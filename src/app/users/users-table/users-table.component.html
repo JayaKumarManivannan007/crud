@@ -1,0 +1,80 @@
+<div class="toolbar">
+  <div style="display:flex;gap:12px;align-items:center">
+    <label><input type="checkbox" (change)="selectAll($event)"/></label>
+    <input class="input" placeholder="Search users..." [(ngModel)]="q" (ngModelChange)="applyFilter()" style="width:260px"/>
+  </div>
+  <div class="actions">
+    <button class="small-btn" (click)="bulkDelete()" [disabled]="selected.size===0">Delete selected</button>
+  </div>
+</div>
+
+<table class="table" *ngIf="users?.length">
+  <thead>
+    <tr>
+      <th></th>
+      <th>User</th>
+      <th>User Role</th>
+      <th>Status</th>
+      <th>Social Profile</th>
+      <th>Promote</th>
+      <th>Rating</th>
+      <th>Last Login</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let u of pageItems()">
+      <td><input type="checkbox" (change)="toggleSelect(u.id,$event)"/></td>
+      <td>
+        <div class="user-cell">
+          <div class="avatar" [style.background]="avatarGradient(u.id)"></div>
+          <div>
+            <div style="font-weight:600">{{u.name}}</div>
+            <div style="color:var(--muted);font-size:13px">{{u.id}}</div>
+          </div>
+        </div>
+      </td>
+      <td><span class="role-pill">{{u.role}}</span></td>
+      <td><span [class.status-dot]="true" [class.status-active]="u.status==='Active'" [class.status-inactive]="u.status!=='Active'"></span>{{u.status}}</td>
+      <td style="color:var(--muted)">{{u.social.join(' • ')}}</td>
+      <td>
+        <div class="promote-toggle" [class.on]="u.promote" (click)="togglePromote(u)">
+          <div class="promote-thumb"></div>
+        </div>
+      </td>
+      <td><span [class.rating-up]="u.rating>=4.5" [class.rating-down]="u.rating<4.5">{{u.rating}}</span></td>
+      <td>{{u.lastLogin}}</td>
+      <td style="text-align:right">
+        <button class="small-btn" (click)="openEdit(u)">Edit</button>
+        <button class="small-btn" (click)="askDelete(u.id)">•••</button>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<div *ngIf="!users?.length" style="padding:18px;color:var(--muted)">No users available</div>
+
+<div class="pagination" *ngIf="total>0">
+  <div>
+    Rows per page:
+    <select [(ngModel)]="perPage" (change)="applyFilter(); page=1">
+      <option value="5">5</option>
+      <option value="10" selected>10</option>
+      <option value="25">25</option>
+    </select>
+  </div>
+
+  <div class="pages">
+    <button class="page-btn" (click)="changePage(page-1)">&lt;</button>
+    <button class="page-btn" [class.active]="page===1" (click)="changePage(1)">1</button>
+    <button class="page-btn" [class.active]="page===2" (click)="changePage(2)" *ngIf="total>10">2</button>
+    <button class="page-btn" (click)="changePage(page+1)">&gt;</button>
+    <div style="margin-left:12px;color:var(--muted)">{{(page-1)*perPage+1}}-{{Math.min(page*perPage,total)}} of {{total}}</div>
+  </div>
+</div>
+
+<!-- user form modal -->
+<app-user-form *ngIf="showForm" [user]="editing" (close)="closeForm($event)" (save)="saveUser($event)"></app-user-form>
+
+<!-- confirm delete -->
+<app-confirm-delete *ngIf="showConfirm" (close)="confirmDelete($event)"></app-confirm-delete>

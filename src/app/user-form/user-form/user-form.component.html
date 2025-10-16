@@ -1,0 +1,27 @@
+<div class="modal-overlay">
+  <div class="modal">
+    <h3>{{model.id ? 'Edit user' : 'Add new user'}}</h3>
+
+    <input class="input" placeholder="Full name" [(ngModel)]="model.name" />
+    <div class="row">
+      <div class="col">
+        <input class="input" placeholder="Role" [(ngModel)]="model.role" />
+      </div>
+      <div class="col">
+        <select class="input" [(ngModel)]="model.status">
+          <option>Active</option><option>Inactive</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col"><input class="input" placeholder="Rating" type="number" [(ngModel)]="model.rating" /></div>
+      <div class="col"><input class="input" placeholder="Last login" type="date" [(ngModel)]="model.lastLogin" /></div>
+    </div>
+
+    <div class="form-actions">
+      <button class="small-btn" (click)="doClose()">Cancel</button>
+      <button class="add-btn" (click)="submit()">{{model.id ? 'Save changes' : 'Add user'}}</button>
+    </div>
+  </div>
+</div>

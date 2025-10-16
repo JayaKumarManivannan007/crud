@@ -1,0 +1,23 @@
+ <div class="app-shell">
+    <div class="container">
+      <div class="header-card">
+        <div class="header-left">All Users: <strong>1,356,546</strong> Projects: <strong>884</strong></div>
+        <div class="controls">
+          <button class="small-btn" (click)="onSettings()">Table settings</button>
+        </div>
+      </div>
+
+      <div style="display:flex;gap:12px;align-items:center;margin-bottom:8px">
+        <button class="add-btn" (click)="openAdd()">+ Add new user</button>
+        <div style="margin-left:auto">
+          <button class="small-btn">Suspend all</button>
+          <button class="small-btn">Archive all</button>
+          <button class="small-btn">Delete all</button>
+        </div>
+      </div>
+
+      <div class="table-card">
+        <app-users-table></app-users-table>
+      </div>
+    </div>
+  </div>
